@@ -1,0 +1,53 @@
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: why-backend
+  # MySQL Configuration
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/learning_plan_tool?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true
+    username: root
+    password: 1234
+  session:
+    store-type: redis
+    timeout: 30m
+  redis:
+    host:localhost
+    port:6379
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    # only print sql log in development
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除（默认为1）
+      logic-not-delete-value: 0 # 逻辑未删除（默认为0）
+
+
+
+knife4j:
+  enable: true
+  openapi:
+    title: 接口文档
+    version: 1.0
+    group:
+      default:
+        group-name: 默认分组
+        api-rule: package
+        api-rule-resources:
+          - com.scut.controller
+
+# jwt配置
+scut:
+  jwt:
+    secret-key: FromThisValleyTheySayYouAreGoingWeWillMissYourBrightEyesAndSweetSmile # 密钥
+    ttl: 86400000
+    token-name: token

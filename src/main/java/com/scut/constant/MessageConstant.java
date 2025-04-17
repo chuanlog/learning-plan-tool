@@ -1,0 +1,17 @@
+package com.scut.constant;
+
+/**
+ * 字符串常量类
+ */
+public class MessageConstant {
+    // 用户名重复报错信息
+    public static final String USER_ALREADY_EXISTS = "用户名重复";
+    // 未知错误
+    public static final String UNKNOWN_ERROR = "未知错误";
+    // 缺少信息
+    public static final String MESSING_INFORMATION = "缺少信息";
+    // 用户不存在
+    public static final String USER_NOT_EXISTS = "用户不存在";
+    // 密码错误
+    public static final String PASSWORD_ERROR = "密码错误";
+}
