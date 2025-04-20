@@ -14,4 +14,8 @@ public class MessageConstant {
     public static final String USER_NOT_EXISTS = "用户不存在";
     // 密码错误
     public static final String PASSWORD_ERROR = "密码错误";
+    // 课程不存在
+    public static final String COURSE_NOT_EXIST = "课程不存在";
+    // 课程已存在
+    public static final String COURSE_EXIST = "当前课程已存在";
 }

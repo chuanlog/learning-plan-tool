@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/test")
 @Slf4j
-@Api(tags = "TestController")
+@Api(tags = "测试接口")
 public class TestController {
     @GetMapping
     @ApiOperation(value = "测试接口")

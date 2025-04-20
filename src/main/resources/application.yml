@@ -22,7 +22,7 @@ spring:
 
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: false
+    map-underscore-to-camel-case: true
     # only print sql log in development
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
