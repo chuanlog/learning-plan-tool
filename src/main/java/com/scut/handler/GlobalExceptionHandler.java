@@ -3,7 +3,9 @@ package com.scut.handler;
 
 import com.scut.constant.MessageConstant;
 import com.scut.exception.BaseException;
+import com.scut.exception.MissingInformationException;
 import com.scut.result.Result;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +47,16 @@ public class GlobalExceptionHandler {
         return Result.error(MessageConstant.UNKNOWN_ERROR);
     }
 
+    /**
+     * 捕获JWT过期异常
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler
+    public Result exceptionHandler(ExpiredJwtException ex){
+        log.error("异常信息：{}", ex.getMessage());
+        return Result.error("登录令牌过时，请重新登录");
+    }
     /**
      * 捕获未知异常
      * @param ex
