@@ -2,8 +2,6 @@ package com.scut.entity;
 
 import lombok.*;
 
-import java.io.Serializable;
-
 /**
  * 先修课程实体类
  */

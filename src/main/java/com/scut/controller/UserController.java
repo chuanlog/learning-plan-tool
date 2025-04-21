@@ -1,13 +1,13 @@
 package com.scut.controller;
 
+import com.scut.constant.JwtClaimsConstant;
 import com.scut.dto.UserDTO;
 import com.scut.entity.User;
-import com.scut.service.UserService;
-import com.scut.vo.UserLoginVO;
-import com.scut.constant.JwtClaimsConstant;
 import com.scut.properties.JwtProperties;
 import com.scut.result.Result;
+import com.scut.service.UserService;
 import com.scut.util.JwtUtil;
+import com.scut.vo.UserLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

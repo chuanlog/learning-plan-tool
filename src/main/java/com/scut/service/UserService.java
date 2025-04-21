@@ -1,7 +1,7 @@
 package com.scut.service;
 
-import com.scut.entity.User;
 import com.scut.dto.UserDTO;
+import com.scut.entity.User;
 
 /**
  * 用户服务类

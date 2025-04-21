@@ -3,7 +3,6 @@ package com.scut.handler;
 
 import com.scut.constant.MessageConstant;
 import com.scut.exception.BaseException;
-import com.scut.exception.MissingInformationException;
 import com.scut.result.Result;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
