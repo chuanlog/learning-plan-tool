@@ -51,3 +51,4 @@ scut:
     secret-key: FromThisValleyTheySayYouAreGoingWeWillMissYourBrightEyesAndSweetSmile # 密钥
     ttl: 86400000
     token-name: token
+

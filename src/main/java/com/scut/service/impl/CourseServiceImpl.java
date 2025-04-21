@@ -73,6 +73,7 @@ public class CourseServiceImpl implements CourseService {
      * @param id 课程id
      */
     @Override
+    @Transactional
     public void deleteCourse(Long id) {
         Course course = courseMapper.getById(id);
         // 进行校验
@@ -96,5 +97,21 @@ public class CourseServiceImpl implements CourseService {
         }
         courseMapper.deleteById(id);
         coursePrerequisiteMapper.deleteByCourseId(id);
+    }
+
+    /**
+     * 获取用户所有课程
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Course> getCoursesByUserId(Long userId) {
+        //判断当前请求uid是否是当前用户的id
+        if(!Objects.equals(userId, BaseContext.getCurrentId())){
+            // 权限错误
+            throw new BaseException(MessageConstant.PERMISSION_ERROR);
+        }
+        return courseMapper.getByUserId(userId);
     }
 }

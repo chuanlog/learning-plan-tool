@@ -22,4 +22,6 @@ public class MessageConstant {
     public static final String CANNOT_OPERATE_COURSE = "不能操作该课程";
     // 课程有先修课程
     public static final String COURSE_HAS_PRE_REQUISITE = "该课程有先修课程，请先删除先修课程";
+    //权限错误
+    public static final String PERMISSION_ERROR = "权限错误";
 }
