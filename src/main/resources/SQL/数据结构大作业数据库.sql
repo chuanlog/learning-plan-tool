@@ -1,3 +1,6 @@
+DROP DATABASE learning_plan_tool;
+CREATE DATABASE IF NOT EXISTS `learning_plan_tool`;
+USE learning_plan_tool;
 -- 建立课程表
 CREATE TABLE course
 (
@@ -36,5 +39,6 @@ CREATE TABLE user
     CONSTRAINT username
         UNIQUE (username)
 );
+-- 插入初始用户
 INSERT INTO user (username, password)
 VALUES ('admin', 'e10adc3949ba59abbe56e057f20f883e');
