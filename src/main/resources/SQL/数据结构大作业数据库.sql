@@ -1,3 +1,4 @@
+-- 建立课程表
 CREATE TABLE course
 (
     id          bigint AUTO_INCREMENT COMMENT '课程ID（主键）'
@@ -12,7 +13,7 @@ CREATE TABLE course
 
 CREATE INDEX idx_user_id
     ON course (user_id);
-
+-- 建立先修关系表
 CREATE TABLE course_prerequisite
 (
     course_id       int NOT NULL COMMENT '当前课程ID',
@@ -25,7 +26,7 @@ CREATE INDEX idx_course_id
 
 CREATE INDEX idx_prerequisite_id
     ON course_prerequisite (prerequisite_id);
-
+-- 建立用户表
 CREATE TABLE user
 (
     id       bigint AUTO_INCREMENT COMMENT '主键'

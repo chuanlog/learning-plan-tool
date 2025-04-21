@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -23,6 +24,7 @@ public class CourseServiceImpl implements CourseService {
     private CourseMapper courseMapper;
     @Autowired
     private CoursePrerequisiteMapper coursePrerequisiteMapper;
+
     /**
      * 添加课程
      *
@@ -40,28 +42,59 @@ public class CourseServiceImpl implements CourseService {
         HashSet<Long> courseIds = new HashSet<>();
         for (Course c : courses) {
             courseIds.add(c.getId());
-            if(c.getCourseName().equals(course.getCourseName())){
+            if (c.getCourseName().equals(course.getCourseName())) {
                 throw new BaseException(MessageConstant.COURSE_EXIST);
             }
         }
         //检查先修课程是否存在
-        for(Long courseId : courseDTO.getPreRequisiteCourseIds()){
-            if(!courseIds.contains(courseId)){
+        for (Long courseId : courseDTO.getPreRequisiteCourseIds()) {
+            if (!courseIds.contains(courseId)) {
                 throw new BaseException(MessageConstant.COURSE_NOT_EXIST
-                        +"  id为:"
-                        +courseId);
+                        + "  id为:"
+                        + courseId);
             }
         }
         //插入新课程
         courseMapper.add(course);
         //插入新课程的先修课程关系
-        HashSet<CoursePrerequisite>preCourses=new HashSet<>();
+        HashSet<CoursePrerequisite> preCourses = new HashSet<>();
         List<Long> coursePrerequisites = courseDTO.getPreRequisiteCourseIds();
-        for (Long coursePrerequisite : coursePrerequisites){
-            preCourses.add(new CoursePrerequisite(course.getId(),coursePrerequisite));
+        for (Long coursePrerequisite : coursePrerequisites) {
+            preCourses.add(new CoursePrerequisite(course.getId(), coursePrerequisite));
         }
-        for (CoursePrerequisite preCourse : preCourses){
+        for (CoursePrerequisite preCourse : preCourses) {
             coursePrerequisiteMapper.add(preCourse);
         }
+    }
+
+    /**
+     * 删除课程
+     *
+     * @param id 课程id
+     */
+    @Override
+    public void deleteCourse(Long id) {
+        Course course = courseMapper.getById(id);
+        // 进行校验
+        if (course == null) {
+            // 课程不存在
+            throw new BaseException(MessageConstant.COURSE_NOT_EXIST);
+        }
+        if (!Objects.equals(course.getUserId(), BaseContext.getCurrentId())) {
+            // 当前用户不是该课程的创建者
+            throw new BaseException(MessageConstant.CANNOT_OPERATE_COURSE);
+        }
+        List<CoursePrerequisite> coursePrerequisites = coursePrerequisiteMapper.getByPrerequisiteCourseId(id);
+        if (coursePrerequisites!=null&& !coursePrerequisites.isEmpty()){
+            // 存在先修课程，不能删除，拼接错误信息
+            StringBuilder message = new StringBuilder();
+            for (CoursePrerequisite coursePrerequisite : coursePrerequisites) {
+                message.append(coursePrerequisite.getCourseId()).append(",");
+            }
+            message.deleteCharAt(message.length() - 1);
+            throw new BaseException(MessageConstant.COURSE_HAS_PRE_REQUISITE+"  id为:"+message);
+        }
+        courseMapper.deleteById(id);
+        coursePrerequisiteMapper.deleteByCourseId(id);
     }
 }

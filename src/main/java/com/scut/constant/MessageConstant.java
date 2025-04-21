@@ -18,4 +18,8 @@ public class MessageConstant {
     public static final String COURSE_NOT_EXIST = "课程不存在";
     // 课程已存在
     public static final String COURSE_EXIST = "当前课程已存在";
+    // 不能操作该课程
+    public static final String CANNOT_OPERATE_COURSE = "不能操作该课程";
+    // 课程有先修课程
+    public static final String COURSE_HAS_PRE_REQUISITE = "该课程有先修课程，请先删除先修课程";
 }
