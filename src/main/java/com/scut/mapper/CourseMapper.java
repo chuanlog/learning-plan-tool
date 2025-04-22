@@ -37,4 +37,10 @@ public interface CourseMapper {
      */
     @Delete("delete from course where id = #{id}")
     void deleteById(Long id);
+
+    /**
+     * 更新课程
+     * @param newCourse
+     */
+    void update(Course newCourse);
 }

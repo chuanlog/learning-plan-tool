@@ -14,6 +14,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 public class CourseDTO {
+    private Long id;
     private String courseName; // 课程名称
     private Integer credits; // 学分
     private Integer totalHours; // 总课时

@@ -2,14 +2,21 @@ package com.scut.algorithm.impl;
 
 import com.scut.algorithm.CycleJudge;
 import com.scut.entity.CoursePrerequisite;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component//加入到IOC容器中
 public class CycleJudgeImpl implements CycleJudge {
-    
+    /**
+     * 全局判断是否有环
+     * @param relations 关系列表,其中CoursePrerequisite类的courseId为当前课程id，prerequisiteId为当前课程的先修课程id
+     * @param courseIds 课程id列表
+     * @return
+     */
     @Override
     public List<Long> judgeGlobally(List<CoursePrerequisite> relations, List<Long> courseIds) {
         // 建立课程依赖关系图
@@ -34,7 +41,14 @@ public class CycleJudgeImpl implements CycleJudge {
         return new ArrayList<>(); // 无环
     }
 
-    // 深度优先搜索，检查是否有环
+    /**
+     * 深度优先搜索判断是否有环
+     * @param courseId
+     * @param graph
+     * @param visitStatus
+     * @param cycle
+     * @return
+     */
     private boolean hasCycle(Long courseId, Map<Long, List<Long>> graph, Map<Long, Integer> visitStatus, List<Long> cycle) {
         // 0: 未访问, 1: 当前访问, 2: 已访问
         visitStatus.put(courseId, 1);
@@ -56,7 +70,6 @@ public class CycleJudgeImpl implements CycleJudge {
                 }
             }
         }
-
         visitStatus.put(courseId, 2); // 完成访问
         return false;
     }

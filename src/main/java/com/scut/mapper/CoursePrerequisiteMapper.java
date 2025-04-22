@@ -29,4 +29,11 @@ public interface CoursePrerequisiteMapper {
      */
     @Delete("delete from course_prerequisite where course_id = #{id}")
     void deleteByCourseId(Long id);
+
+    /**
+     * 查询对应课程id列表的所有先修关系
+     * @param courseIds
+     * @return
+     */
+    List<CoursePrerequisite> getByCourseIds(List<Long> courseIds);
 }

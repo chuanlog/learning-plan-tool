@@ -8,5 +8,16 @@
         insert into course_prerequisite(course_id, prerequisite_id)
         values (#{courseId}, #{prerequisiteId})
     </insert>
+    <select id="getByCourseIds" resultType="com.scut.entity.CoursePrerequisite">
+        select * from course_prerequisite where
+        course_id in
+        <foreach collection="courseIds" item="courseId" open="(" separator="," close=")">
+            #{courseId}
+        </foreach>
+        or prerequisite_id in
+        <foreach collection="courseIds" item="courseId" open="(" separator="," close=")">
+            #{courseId}
+        </foreach>
+    </select>
 
 </mapper>

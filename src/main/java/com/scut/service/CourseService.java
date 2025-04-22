@@ -24,4 +24,11 @@ public interface CourseService {
      * @return
      */
     List<Course> getCoursesByUserId(Long userId);
+
+    /**
+     * 修改课程数据
+     *
+     * @param courseDTO
+     */
+    void updateCourse(CourseDTO courseDTO);
 }

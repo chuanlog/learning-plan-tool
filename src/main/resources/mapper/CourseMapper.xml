@@ -7,4 +7,14 @@
         insert into course(course_name, credits, total_hours, course_type, user_id)
         values (#{courseName}, #{credits}, #{totalHours}, #{courseType}, #{userId})
     </insert>
+    <update id="update">
+        update course
+        <set>
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="credits != null">credits = #{credits},</if>
+            <if test="totalHours != null">total_hours = #{totalHours},</if>
+            <if test="courseType != null">course_type = #{courseType},</if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

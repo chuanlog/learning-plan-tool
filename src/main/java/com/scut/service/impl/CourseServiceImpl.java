@@ -1,5 +1,7 @@
 package com.scut.service.impl;
 
+import com.fasterxml.jackson.databind.ext.CoreXMLSerializers;
+import com.scut.algorithm.CycleJudge;
 import com.scut.constant.MessageConstant;
 import com.scut.context.BaseContext;
 import com.scut.dto.CourseDTO;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -24,6 +27,8 @@ public class CourseServiceImpl implements CourseService {
     private CourseMapper courseMapper;
     @Autowired
     private CoursePrerequisiteMapper coursePrerequisiteMapper;
+    @Autowired
+    private CycleJudge cycleJudge;
 
     /**
      * 添加课程
@@ -86,14 +91,14 @@ public class CourseServiceImpl implements CourseService {
             throw new BaseException(MessageConstant.CANNOT_OPERATE_COURSE);
         }
         List<CoursePrerequisite> coursePrerequisites = coursePrerequisiteMapper.getByPrerequisiteCourseId(id);
-        if (coursePrerequisites!=null&& !coursePrerequisites.isEmpty()){
+        if (coursePrerequisites != null && !coursePrerequisites.isEmpty()) {
             // 存在先修课程，不能删除，拼接错误信息
             StringBuilder message = new StringBuilder();
             for (CoursePrerequisite coursePrerequisite : coursePrerequisites) {
                 message.append(coursePrerequisite.getCourseId()).append(",");
             }
             message.deleteCharAt(message.length() - 1);
-            throw new BaseException(MessageConstant.COURSE_HAS_PRE_REQUISITE+"  id为:"+message);
+            throw new BaseException(MessageConstant.COURSE_HAS_PRE_REQUISITE + "  id为:" + message);
         }
         courseMapper.deleteById(id);
         coursePrerequisiteMapper.deleteByCourseId(id);
@@ -108,10 +113,72 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getCoursesByUserId(Long userId) {
         //判断当前请求uid是否是当前用户的id
-        if(!Objects.equals(userId, BaseContext.getCurrentId())){
+        if (!Objects.equals(userId, BaseContext.getCurrentId())) {
             // 权限错误
             throw new BaseException(MessageConstant.PERMISSION_ERROR);
         }
         return courseMapper.getByUserId(userId);
+    }
+
+    /**
+     * 修改课程数据
+     *
+     * @param courseDTO
+     */
+    @Override
+    public void updateCourse(CourseDTO courseDTO) {
+        if (courseDTO.getId() == null) {
+            //课程为空
+            throw new BaseException(MessageConstant.COURSE_NOT_EXIST);
+        }
+        Course currCourse = courseMapper.getById(courseDTO.getId());
+        if (!Objects.equals(currCourse.getUserId(), BaseContext.getCurrentId())) {
+            //权限错误
+            throw new BaseException(MessageConstant.PERMISSION_ERROR);
+        }
+        //如果涉及修改先修关系，则需要先判断是否存在循环依赖
+        if (courseDTO.getPreRequisiteCourseIds() != null) {
+            //查询当前用户的所有课程及其id,并建立id哈希集合加速查询
+            List<Course> courses = courseMapper.getByUserId(BaseContext.getCurrentId());
+            List<Long> courseIds = courses.stream().map(Course::getId).collect(Collectors.toList());
+            HashSet<Long> courseIdSet = new HashSet<>(courseIds);
+            //查询当前用户的所有先修关系
+            List<CoursePrerequisite> coursePrerequisites = coursePrerequisiteMapper.getByCourseIds(courseIds);
+            //删除原课程的先修关系
+            coursePrerequisites.removeIf(coursePrerequisite -> coursePrerequisite.getCourseId().equals(courseDTO.getId()));
+            //构建课程新的先修关系
+            List<Long> preCourseIds = courseDTO.getPreRequisiteCourseIds();
+            for (Long preCourseId : preCourseIds) {
+                if (!courseIdSet.contains(preCourseId)) {
+                    //先修课程不存在
+                    throw new BaseException(MessageConstant.COURSE_NOT_EXIST);
+                }
+                coursePrerequisites.add(new CoursePrerequisite(courseDTO.getId(), preCourseId));
+            }
+            //判圈
+            List<Long> cycle = cycleJudge.judgeGlobally(coursePrerequisites, courseIds);
+            if (!cycle.isEmpty()) {
+                //存在环
+                StringBuilder message = new StringBuilder();
+                for (Long id : cycle) {
+                    message.append(id).append(",");
+                }
+                message.deleteCharAt(message.length() - 1);
+                throw new BaseException(MessageConstant.COURSE_HAS_CYCLE + "  id为:" + message);
+            }
+            //修改课程表内容
+            Course newCourse = new Course();
+            BeanUtils.copyProperties(courseDTO, newCourse);
+            courseMapper.update(newCourse);
+            //修改先修关系
+            coursePrerequisiteMapper.deleteByCourseId(courseDTO.getId());
+            for (Long preCourseId : preCourseIds) {
+                coursePrerequisiteMapper.add(new CoursePrerequisite(courseDTO.getId(), preCourseId));
+            }
+        }else{
+            Course course = new Course();
+            BeanUtils.copyProperties(courseDTO, course);
+            courseMapper.update(course);
+        }
     }
 }

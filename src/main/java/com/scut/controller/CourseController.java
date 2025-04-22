@@ -49,10 +49,29 @@ public class CourseController {
         return Result.success();
     }
 
+    /**
+     * 查询用户所有课程
+     * @param userId
+     * @return
+     */
     @GetMapping("/{userId}")
     @ApiOperation("获取用户所有课程")
     public Result<List<Course>> getCoursesByUserId(@PathVariable Long userId) {
         log.info("获取用户所有课程：{}", userId);
         return Result.success(courseService.getCoursesByUserId(userId));
     }
+
+    /**
+     * 修改课程数据
+     * @param courseDTO 修改后的课程数据
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改课程数据")
+    public Result updateCourse(@RequestBody CourseDTO courseDTO) {
+        log.info("修改课程数据：{}", courseDTO);
+        courseService.updateCourse(courseDTO);
+        return Result.success();
+    }
+
 }
