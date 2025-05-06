@@ -85,7 +85,6 @@ class CycleJudgeImplTest {
 
         CycleJudge cycleJudge = new CycleJudgeImpl();
         List<Long> result = cycleJudge.judgeGlobally(relations, courseIds);
-
         // 无依赖关系，无法形成环，返回空列表
         assertTrue(result.isEmpty(), "Expected no cycle, but got: " + result);
     }

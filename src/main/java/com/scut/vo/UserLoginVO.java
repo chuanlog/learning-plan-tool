@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 给前端返回的登录信息
+ * 给前端返回的登录信息,包括id 用户名 token
  */
 @Data
 @Builder

@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 判圈算法的实现类
+ */
 @Component//加入到IOC容器中
 public class CycleJudgeImpl implements CycleJudge {
     /**
