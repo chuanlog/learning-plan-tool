@@ -4,6 +4,7 @@ import com.scut.dto.CourseDTO;
 import com.scut.entity.Course;
 import com.scut.result.Result;
 import com.scut.service.CourseService;
+import com.scut.vo.CourseVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +57,7 @@ public class CourseController {
      */
     @GetMapping("/{userId}")
     @ApiOperation("获取用户所有课程")
-    public Result<List<Course>> getCoursesByUserId(@PathVariable Long userId) {
+    public Result<List<CourseVO>> getCoursesByUserId(@PathVariable Long userId) {
         log.info("获取用户所有课程：{}", userId);
         return Result.success(courseService.getCoursesByUserId(userId));
     }

@@ -19,5 +19,8 @@
             #{courseId}
         </foreach>
     </select>
+    <select id="getByCurrCourseId" resultType="java.lang.Long">
+        select prerequisite_id from course_prerequisite where course_id = #{id}
+    </select>
 
 </mapper>

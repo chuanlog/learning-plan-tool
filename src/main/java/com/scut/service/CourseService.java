@@ -2,6 +2,7 @@ package com.scut.service;
 
 import com.scut.dto.CourseDTO;
 import com.scut.entity.Course;
+import com.scut.vo.CourseVO;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface CourseService {
      * @param userId
      * @return
      */
-    List<Course> getCoursesByUserId(Long userId);
+    List<CourseVO> getCoursesByUserId(Long userId);
 
     /**
      * 修改课程数据

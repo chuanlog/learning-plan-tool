@@ -36,4 +36,11 @@ public interface CoursePrerequisiteMapper {
      * @return
      */
     List<CoursePrerequisite> getByCourseIds(List<Long> courseIds);
+
+    /**
+     * 获取当前课程的所有先修课程id列表
+     * @param id
+     * @return
+     */
+    List<Long> getByCurrCourseId(Long id);
 }

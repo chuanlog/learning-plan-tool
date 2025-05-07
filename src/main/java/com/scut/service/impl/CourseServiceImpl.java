@@ -11,11 +11,13 @@ import com.scut.exception.BaseException;
 import com.scut.mapper.CourseMapper;
 import com.scut.mapper.CoursePrerequisiteMapper;
 import com.scut.service.CourseService;
+import com.scut.vo.CourseVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -111,13 +113,22 @@ public class CourseServiceImpl implements CourseService {
      * @return
      */
     @Override
-    public List<Course> getCoursesByUserId(Long userId) {
+    public List<CourseVO> getCoursesByUserId(Long userId) {
         //判断当前请求uid是否是当前用户的id
         if (!Objects.equals(userId, BaseContext.getCurrentId())) {
             // 权限错误
             throw new BaseException(MessageConstant.PERMISSION_ERROR);
         }
-        return courseMapper.getByUserId(userId);
+        List<Course> byUserId = courseMapper.getByUserId(userId);
+        List<CourseVO> resuleSet = new ArrayList<>();
+        for (Course course : byUserId) {
+            CourseVO temp=new CourseVO();
+            BeanUtils.copyProperties(course,temp);
+            List<Long> preRequisiteCourseIds = coursePrerequisiteMapper.getByCurrCourseId(course.getId());
+            temp.setPreRequisiteCourseIds(preRequisiteCourseIds);
+            resuleSet.add(temp);
+        }
+        return resuleSet;
     }
 
     /**
@@ -132,6 +143,10 @@ public class CourseServiceImpl implements CourseService {
             throw new BaseException(MessageConstant.COURSE_NOT_EXIST);
         }
         Course currCourse = courseMapper.getById(courseDTO.getId());
+        if(currCourse==null){
+            //没有这个课程
+            throw new BaseException(MessageConstant.COURSE_NOT_EXIST);
+        }
         if (!Objects.equals(currCourse.getUserId(), BaseContext.getCurrentId())) {
             //权限错误
             throw new BaseException(MessageConstant.PERMISSION_ERROR);
@@ -175,7 +190,7 @@ public class CourseServiceImpl implements CourseService {
             for (Long preCourseId : preCourseIds) {
                 coursePrerequisiteMapper.add(new CoursePrerequisite(courseDTO.getId(), preCourseId));
             }
-        }else{
+        } else {
             Course course = new Course();
             BeanUtils.copyProperties(courseDTO, course);
             courseMapper.update(course);
