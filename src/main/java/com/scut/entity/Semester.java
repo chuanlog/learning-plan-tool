@@ -14,10 +14,12 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 public class Semester {
-    List<Course>MustCourses;//该学期的必修课程
-    List<Course>ElectiveCourses;//该学期的选修课程
-    List<Course>RecommendCourses;// 该学期的推荐课程(通选课等)
-    Integer TotalMustScore;//该学期必修课的总学分
-    Integer ElectiveScore;//选修课的总学分
-    Integer RecommendScore;//推荐在这个学期修的选修课的总学分
+    List<Course> Courses;//该学期的推荐修读课程
+    Integer totalCredits;// 该学期的总学分
+    Integer totalHours;// 该学期的总学时
+    Integer publicBaseCourseCredits;// 公共基础课的总学分
+    Integer majorBaseCourseCredits;// 公共基础课的总学分
+    Integer majorElectiveCourseCredits;// 该学期专业选修课程的总学分
+    Integer commonElectiveCourseCredits;// 该学期公共选修课程的总学分
+    Integer otherCourseCredits;// 该学期其他课程的总学分(体育+毕设+军训)
 }
