@@ -42,19 +42,8 @@ public class PlanningAlgorithmImpl implements PlanningAlgorithm {
             if (Objects.equals(c.getCourseType(), PHYSICAL_EDUCATION)) {
                 if (semesterIndex < 8) {
                     Semester semester = allSemesters.get(semesterIndex);
-                    semester.getCourses().add(c);
-
-                    //更新总学分
-                    Integer totalCredits = c.getCredits() + semester.getTotalCredits();
-                    semester.setTotalCredits(totalCredits);
-
-                    //更新其它学分
-                    Integer otherCourseCredits = c.getCredits() + semester.getOtherCourseCredits();
-                    semester.setOtherCourseCredits(otherCourseCredits);
-
-                    //更新总学时
-                    Integer totalHours = c.getTotalHours() + semester.getTotalHours();
-                    semester.setTotalHours(totalHours);
+                    //加入课程之后更新学期属性
+                    UpdateSemester(semester, c);
 
                     semesterIndex++;
                 }
@@ -69,19 +58,7 @@ public class PlanningAlgorithmImpl implements PlanningAlgorithm {
         for (Course c : courses) {
             if (Objects.equals(c.getCourseType(), GRADUATE_DESIGN)) {
                     Semester semester = allSemesters.get(graduationSemester);
-                    semester.getCourses().add(c);
-
-                    //更新总学分
-                    Integer totalCredits = c.getCredits() + semester.getTotalCredits();
-                    semester.setTotalCredits(totalCredits);
-
-                    //更新其它学分
-                    Integer otherCourseCredits = c.getCredits() + semester.getOtherCourseCredits();
-                    semester.setOtherCourseCredits(otherCourseCredits);
-
-                    //更新总学时
-                    Integer totalHours = c.getTotalHours() + semester.getTotalHours();
-                    semester.setTotalHours(totalHours);
+                    UpdateSemester(semester, c);
             }
         }
 
@@ -90,19 +67,7 @@ public class PlanningAlgorithmImpl implements PlanningAlgorithm {
         for (Course c : courses) {
             if (Objects.equals(c.getCourseType(), MILITARY_TRAINING)) {
                 Semester semester = allSemesters.get(trainingSemester);
-                semester.getCourses().add(c);
-
-                //更新总学分
-                Integer totalCredits = c.getCredits() + semester.getTotalCredits();
-                semester.setTotalCredits(totalCredits);
-
-                //更新其它学分
-                Integer otherCourseCredits = c.getCredits() + semester.getOtherCourseCredits();
-                semester.setOtherCourseCredits(otherCourseCredits);
-
-                //更新总学时
-                Integer totalHours = c.getTotalHours() + semester.getTotalHours();
-                semester.setTotalHours(totalHours);
+                UpdateSemester(semester, c);
             }
         }
 
@@ -112,5 +77,27 @@ public class PlanningAlgorithmImpl implements PlanningAlgorithm {
                 .build();
 
         return learningPlan;
+    }
+
+    /**
+     * 加入课程后更新学期属性
+     * @param semester
+     * @param c
+     */
+    public void UpdateSemester(Semester semester, Course c) {
+        semester.getCourses().add(c);
+
+        //更新总学分
+        Integer totalCredits = c.getCredits() + semester.getTotalCredits();
+        semester.setTotalCredits(totalCredits);
+
+        //更新其它学分
+        Integer otherCourseCredits = c.getCredits() + semester.getOtherCourseCredits();
+        semester.setOtherCourseCredits(otherCourseCredits);
+
+        //更新总学时
+        Integer totalHours = c.getTotalHours() + semester.getTotalHours();
+        semester.setTotalHours(totalHours);
+
     }
 }
