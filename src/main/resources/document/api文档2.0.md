@@ -554,3 +554,254 @@
   ]
 }
 ```
+# 培养计划接口
+
+
+## 获取培养计划
+
+
+**接口地址**:`/api/plan/planninng`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "creditsOfCommonElectiveCourses": 2,
+  "creditsOfProfessionalElectiveCourses": 3,
+  "userId": 6
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|planQueryDTO|planQueryDTO|body|true|PlanQueryDTO|PlanQueryDTO|
+|&emsp;&emsp;creditsOfCommonElectiveCourses|||false|integer(int32)||
+|&emsp;&emsp;creditsOfProfessionalElectiveCourses|||false|integer(int32)||
+|&emsp;&emsp;userId|||false|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|Result«LearningPlan»|
+|201|Created||
+|401|Unauthorized||
+|403|Forbidden||
+|404|Not Found||
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code||integer(int32)|integer(int32)|
+|data||LearningPlan|LearningPlan|
+|&emsp;&emsp;allSemesters||array|Semester|
+|&emsp;&emsp;&emsp;&emsp;commonElectiveCourseCredits||integer||
+|&emsp;&emsp;&emsp;&emsp;courses||array|Course|
+|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;courseName||string||
+|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;courseType||integer||
+|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;credits||integer||
+|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;id||integer||
+|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;totalHours||integer||
+|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;userId||integer||
+|&emsp;&emsp;&emsp;&emsp;majorBaseCourseCredits||integer||
+|&emsp;&emsp;&emsp;&emsp;majorElectiveCourseCredits||integer||
+|&emsp;&emsp;&emsp;&emsp;otherCourseCredits||integer||
+|&emsp;&emsp;&emsp;&emsp;publicBaseCourseCredits||integer||
+|&emsp;&emsp;&emsp;&emsp;totalCredits||integer||
+|&emsp;&emsp;&emsp;&emsp;totalHours||integer||
+|msg||string||
+
+
+**响应示例**:
+```javascript
+{
+  "code": 1,
+  "msg": null,
+  "data": {
+    "allSemesters": [
+      {
+        "totalCredits": 3,
+        "totalHours": 54,
+        "publicBaseCourseCredits": 0,
+        "majorBaseCourseCredits": 0,
+        "majorElectiveCourseCredits": 0,
+        "commonElectiveCourseCredits": 3,
+        "otherCourseCredits": 0,
+        "courses": [
+          {
+            "id": 15,
+            "courseName": "体育课1",
+            "credits": 1,
+            "totalHours": 36,
+            "courseType": 6,
+            "userId": 6
+          },
+          {
+            "id": 12,
+            "courseName": "机器学习",
+            "credits": 3,
+            "totalHours": 54,
+            "courseType": 3,
+            "userId": 6
+          }
+        ]
+      },
+      {
+        "totalCredits": 3,
+        "totalHours": 54,
+        "publicBaseCourseCredits": 0,
+        "majorBaseCourseCredits": 0,
+        "majorElectiveCourseCredits": 0,
+        "commonElectiveCourseCredits": 3,
+        "otherCourseCredits": 0,
+        "courses": [
+          {
+            "id": 16,
+            "courseName": "体育课2",
+            "credits": 1,
+            "totalHours": 36,
+            "courseType": 6,
+            "userId": 6
+          },
+          {
+            "id": 12,
+            "courseName": "机器学习",
+            "credits": 3,
+            "totalHours": 54,
+            "courseType": 3,
+            "userId": 6
+          }
+        ]
+      },
+      {
+        "totalCredits": 0,
+        "totalHours": 0,
+        "publicBaseCourseCredits": 0,
+        "majorBaseCourseCredits": 0,
+        "majorElectiveCourseCredits": 0,
+        "commonElectiveCourseCredits": 0,
+        "otherCourseCredits": 0,
+        "courses": []
+      },
+      {
+        "totalCredits": 5,
+        "totalHours": 90,
+        "publicBaseCourseCredits": 0,
+        "majorBaseCourseCredits": 5,
+        "majorElectiveCourseCredits": 0,
+        "commonElectiveCourseCredits": 0,
+        "otherCourseCredits": 0,
+        "courses": [
+          {
+            "id": 8,
+            "courseName": "高等数学",
+            "credits": 5,
+            "totalHours": 90,
+            "courseType": 1,
+            "userId": 6
+          }
+        ]
+      },
+      {
+        "totalCredits": 4,
+        "totalHours": 72,
+        "publicBaseCourseCredits": 0,
+        "majorBaseCourseCredits": 4,
+        "majorElectiveCourseCredits": 0,
+        "commonElectiveCourseCredits": 0,
+        "otherCourseCredits": 0,
+        "courses": [
+          {
+            "id": 9,
+            "courseName": "线性代数",
+            "credits": 4,
+            "totalHours": 72,
+            "courseType": 1,
+            "userId": 6
+          }
+        ]
+      },
+      {
+        "totalCredits": 3,
+        "totalHours": 54,
+        "publicBaseCourseCredits": 0,
+        "majorBaseCourseCredits": 0,
+        "majorElectiveCourseCredits": 3,
+        "commonElectiveCourseCredits": 0,
+        "otherCourseCredits": 0,
+        "courses": [
+          {
+            "id": 10,
+            "courseName": "数据结构",
+            "credits": 3,
+            "totalHours": 54,
+            "courseType": 2,
+            "userId": 6
+          }
+        ]
+      },
+      {
+        "totalCredits": 3,
+        "totalHours": 54,
+        "publicBaseCourseCredits": 0,
+        "majorBaseCourseCredits": 0,
+        "majorElectiveCourseCredits": 3,
+        "commonElectiveCourseCredits": 0,
+        "otherCourseCredits": 0,
+        "courses": [
+          {
+            "id": 11,
+            "courseName": "算法设计",
+            "credits": 3,
+            "totalHours": 54,
+            "courseType": 2,
+            "userId": 6
+          }
+        ]
+      },
+      {
+        "totalCredits": 0,
+        "totalHours": 0,
+        "publicBaseCourseCredits": 0,
+        "majorBaseCourseCredits": 0,
+        "majorElectiveCourseCredits": 0,
+        "commonElectiveCourseCredits": 0,
+        "otherCourseCredits": 0,
+        "courses": [
+          {
+            "id": 13,
+            "courseName": "人工智能",
+            "credits": 2,
+            "totalHours": 36,
+            "courseType": 4,
+            "userId": 6
+          }
+        ]
+      }
+    ]
+  }
+}
+```
