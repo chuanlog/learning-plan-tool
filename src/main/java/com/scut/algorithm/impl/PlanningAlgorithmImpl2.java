@@ -9,8 +9,10 @@ import com.scut.entity.Semester;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 /**
- * @author cloog
+ * 学习计划生成算法实现类
+ * 基于拓扑排序和学分平衡策略，将课程分配到各个学期
  */
 public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
     @Override
@@ -23,30 +25,33 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         List<Course> remainingCourses = new ArrayList<>(courses);
         List<Semester> semesters = initializeSemesters();
 
-        preAssignSpecialCourses(remainingCourses, semesters, courseMap);
+        preAssignSpecialCourses(remainingCourses, semesters, courseMap);  // 处理必须放在特定学期的课程
 
         // 构建拓扑排序并分组课程
-        Map<Long, List<Long>> graph = buildGraph(relations);
-        Map<Long, Integer> inDegree = calculateInDegree(relations, courses);
-        List<Course> sortedCourses = topologicalSort(courses, graph, inDegree);
+        Map<Long, List<Long>> graph = buildGraph(relations);  // 构建课程依赖图
+        Map<Long, Integer> inDegree = calculateInDegree(relations, courses);  // 计算入度
+        List<Course> sortedCourses = topologicalSort(courses, graph, inDegree);  // 拓扑排序
 
         // 按课程类型分组
         Map<Integer, List<Course>> coursesByType = sortedCourses.stream()
-                .collect(Collectors.groupingBy(Course::getCourseType));
+                .collect(Collectors.groupingBy(Course::getCourseType));  // 按课程类型分类
 
         // 分配必修课程（公共基础课、专业必修课）
-        assignRequiredCourses(coursesByType, semesters, courseMap);
+        assignRequiredCourses(coursesByType, semesters, courseMap);  // 分配必修课程
 
         // 分配选修课程（专业选修课、通选课）
         assignElectiveCourses(coursesByType, semesters, creditsOfProfessionalElectiveCourses,
-                creditsOfCommonElectiveCourses, courseMap);
+                creditsOfCommonElectiveCourses, courseMap);  // 分配选修课程
 
         // 平衡学分并填充学期信息
-        balanceCredits(semesters);
+        balanceCredits(semesters);  // 平衡各学期学分
 
-        return LearningPlan.builder().AllSemesters(semesters).build();
+        return LearningPlan.builder().AllSemesters(semesters).build();  // 构建学习计划
     }
 
+    /**
+     * 初始化8个学期对象
+     */
     private List<Semester> initializeSemesters() {
         List<Semester> semesters = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
@@ -64,6 +69,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         return semesters;
     }
 
+    /**
+     * 预分配特殊课程：毕业设计和体育课
+     */
     private void preAssignSpecialCourses(List<Course> remainingCourses, List<Semester> semesters, Map<Long, Course> courseMap) {
         // 毕业设计放在第8学期
         remainingCourses.removeIf(course -> {
@@ -85,6 +93,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         }
     }
 
+    /**
+     * 构建课程依赖关系图
+     */
     private Map<Long, List<Long>> buildGraph(List<CoursePrerequisite> relations) {
         Map<Long, List<Long>> graph = new HashMap<>();
         for (CoursePrerequisite cp : relations) {
@@ -93,6 +104,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         return graph;
     }
 
+    /**
+     * 计算每个课程的入度（前置课程数量）
+     */
     private Map<Long, Integer> calculateInDegree(List<CoursePrerequisite> relations, List<Course> courses) {
         Map<Long, Integer> inDegree = new HashMap<>();
         courses.forEach(c -> inDegree.put(c.getId(), 0));
@@ -102,6 +116,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         return inDegree;
     }
 
+    /**
+     * 进行拓扑排序，确保满足所有课程前置条件
+     */
     private List<Course> topologicalSort(List<Course> courses, Map<Long, List<Long>> graph, Map<Long, Integer> inDegree) {
         Queue<Course> queue = new LinkedList<>();
         List<Course> sortedCourses = new ArrayList<>();
@@ -126,6 +143,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         return sortedCourses;
     }
 
+    /**
+     * 分配必修课程（公共基础课、专业必修课）到对应学期
+     */
     private void assignRequiredCourses(Map<Integer, List<Course>> coursesByType, List<Semester> semesters, Map<Long, Course> courseMap) {
         // 公共基础课（前3学期）
         List<Course> publicBase = coursesByType.getOrDefault(CourseTypeConstant.PUBLIC_BASE_COURSE, new ArrayList<>());
@@ -136,6 +156,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         distributeCourses(majorBase, semesters.subList(3, 6), courseMap);
     }
 
+    /**
+     * 将课程平均分配到目标学期中
+     */
     private void distributeCourses(List<Course> courses, List<Semester> targetSemesters, Map<Long, Course> courseMap) {
         int coursesPerSemester = (int) Math.ceil((double) courses.size() / targetSemesters.size());
         int index = 0;
@@ -148,6 +171,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         }
     }
 
+    /**
+     * 分配选修课程（专业选修课、通选课）到对应学期
+     */
     private void assignElectiveCourses(Map<Integer, List<Course>> coursesByType, List<Semester> semesters,
                                        int professionalCreditsReq, int commonCreditsReq, Map<Long, Course> courseMap) {
         // 专业选修课（4-7学期）
@@ -159,6 +185,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         distributeElectives(commonElectives, semesters.subList(0, 7), commonCreditsReq);
     }
 
+    /**
+     * 分配选修课程直到满足或略超学分要求
+     */
     private void distributeElectives(List<Course> electives, List<Semester> targetSemesters, int creditReq) {
         int totalAssignedCredits = 0;
         for (Semester semester : targetSemesters) {
@@ -173,6 +202,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         }
     }
 
+    /**
+     * 更新学期统计信息（添加课程时）
+     */
     private void updateSemesterStats(Semester semester, Course course) {
         semester.setTotalCredits(semester.getTotalCredits() + course.getCredits());
         semester.setTotalHours(semester.getTotalHours() + course.getTotalHours());
@@ -194,6 +226,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         }
     }
 
+    /**
+     * 平衡各学期学分，使各学期学分尽量均衡
+     */
     private void balanceCredits(List<Semester> semesters) {
         int totalCredits = semesters.stream().mapToInt(Semester::getTotalCredits).sum();
         int avgCredits = totalCredits / semesters.size();
@@ -229,7 +264,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         });
     }
 
-    // 新增辅助方法：更新学期统计（添加/移除）
+    /**
+     * 更新学期统计信息（添加/移除课程时）
+     */
     private void updateSemesterStats(Semester semester, Course course, boolean isRemove) {
         int factor = isRemove ? -1 : 1;
         semester.setTotalCredits(semester.getTotalCredits() + factor * course.getCredits());
@@ -258,7 +295,9 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         }
     }
 
-
+    /**
+     * 判断是否是特殊课程（毕业设计或体育课）
+     */
     private boolean isSpecialCourse(Course course) {
         return course.getCourseType() == CourseTypeConstant.GRADUATE_DESIGN ||
                 course.getCourseType() == CourseTypeConstant.PHYSICAL_EDUCATION;
