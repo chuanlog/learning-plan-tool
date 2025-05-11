@@ -196,4 +196,46 @@ public class CourseServiceImpl implements CourseService {
             courseMapper.update(course);
         }
     }
+
+    /**
+     * 添加新的课程依赖关系
+     * @param coursePrerequisite
+     */
+    @Override
+    public void addCoursePrerequisite(CoursePrerequisite coursePrerequisite) {
+        //查询当前用户的所有课程及其id,并建立id哈希集合加速查询
+        List<Course> courses = courseMapper.getByUserId(BaseContext.getCurrentId());
+        List<Long> courseIds = courses.stream().map(Course::getId).collect(Collectors.toList());
+        HashSet<Long> courseIdSet = new HashSet<>(courseIds);
+        //查询当前用户的所有先修关系
+        List<CoursePrerequisite> coursePrerequisites = coursePrerequisiteMapper.getByCourseIds(courseIds);
+        //存在性校验
+        if (!courseIdSet.contains(coursePrerequisite.getCourseId())) {
+            //课程不存在
+            throw new BaseException(MessageConstant.COURSE_NOT_EXIST+" id为:"+coursePrerequisite.getCourseId());
+        }
+        if (!courseIdSet.contains(coursePrerequisite.getPrerequisiteId())) {
+            //先修课程不存在
+            throw new BaseException(MessageConstant.COURSE_NOT_EXIST+" id为:"+coursePrerequisite.getPrerequisiteId());
+        }
+        if (coursePrerequisites.contains(coursePrerequisite)) {
+            //已经存在先修关系
+            throw new BaseException(MessageConstant.COURSE_PREREQUISITE_EXIST);
+        }
+        //判圈，如果添加后没有圈就持久化这条添加
+        coursePrerequisites.add(coursePrerequisite);
+        List<Long> cycle = cycleJudge.judgeGlobally(coursePrerequisites, courseIds);
+        if (!cycle.isEmpty()) {
+            //存在环
+            StringBuilder message = new StringBuilder();
+            for (Long id : cycle) {
+                message.append(id).append(",");
+            }
+            message.deleteCharAt(message.length() - 1);
+            throw new BaseException(MessageConstant.COURSE_HAS_CYCLE + "  id为:" + message);
+        } else {
+            //没有环，持久化
+            coursePrerequisiteMapper.add(coursePrerequisite);
+        }
+    }
 }

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * 学习计划生成算法实现类
  * 基于拓扑排序和学分平衡策略，将课程分配到各个学期
+ * @author cloog
  */
 public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
     @Override

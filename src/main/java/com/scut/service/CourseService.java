@@ -2,6 +2,7 @@ package com.scut.service;
 
 import com.scut.dto.CourseDTO;
 import com.scut.entity.Course;
+import com.scut.entity.CoursePrerequisite;
 import com.scut.vo.CourseVO;
 
 import java.util.List;
@@ -32,4 +33,10 @@ public interface CourseService {
      * @param courseDTO
      */
     void updateCourse(CourseDTO courseDTO);
+
+    /**
+     * 添加新的课程依赖关系
+     * @param coursePrerequisite 课程依赖关系
+     */
+    void addCoursePrerequisite(CoursePrerequisite coursePrerequisite);
 }

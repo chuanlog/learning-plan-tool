@@ -2,6 +2,7 @@ package com.scut.controller;
 
 import com.scut.dto.CourseDTO;
 import com.scut.entity.Course;
+import com.scut.entity.CoursePrerequisite;
 import com.scut.result.Result;
 import com.scut.service.CourseService;
 import com.scut.vo.CourseVO;
@@ -74,5 +75,14 @@ public class CourseController {
         courseService.updateCourse(courseDTO);
         return Result.success();
     }
-
+    /**
+     * 添加新的课程依赖关系
+     * @param coursePrerequisite
+     */
+    @PostMapping("/prerequisite")
+    @ApiOperation("添加新的课程依赖关系")
+    public Result addCoursePrerequisite(@RequestBody CoursePrerequisite coursePrerequisite) {
+        courseService.addCoursePrerequisite(coursePrerequisite);
+        return Result.success();
+    }
 }

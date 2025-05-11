@@ -26,4 +26,6 @@ public class MessageConstant {
     public static final String PERMISSION_ERROR = "权限错误";
     //有环
     public static final String COURSE_HAS_CYCLE = "课程依赖存在环";
+    //依赖关系已存在
+    public static final String COURSE_PREREQUISITE_EXIST = "已经存在该依赖关系";
 }
