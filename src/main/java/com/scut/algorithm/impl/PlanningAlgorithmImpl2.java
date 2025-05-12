@@ -235,7 +235,7 @@ public class PlanningAlgorithmImpl2 implements PlanningAlgorithm {
         int avgCredits = totalCredits / semesters.size();
 
         semesters.forEach(currentSemester -> {
-            int retry = 3; // 安全阀防止无限循环
+            int retry = 3; // 安全阀防止无限循环，在测试过程中出现死循环，加这个避免
             while (currentSemester.getTotalCredits() > avgCredits + 3 && retry-- > 0) {
                 Optional<Course> toMove = currentSemester.getCourses().stream()
                         .filter(c -> !isSpecialCourse(c))

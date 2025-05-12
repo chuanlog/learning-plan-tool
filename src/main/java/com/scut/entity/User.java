@@ -3,7 +3,7 @@ package com.scut.entity;
 import lombok.*;
 
 /**
- * 用户实体类，对应数据库中用户表
+ * 用户实体类
  */
 @Data
 @Builder
@@ -12,7 +12,7 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class User {
-    Long id;
-    String username;
-    String password;
+    Long id;// 用户id
+    String username;// 用户名
+    String password;// 密码
 }

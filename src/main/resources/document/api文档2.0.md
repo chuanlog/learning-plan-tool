@@ -458,6 +458,78 @@
 }
 ```
 
+## 添加新的课程依赖关系
+
+
+**接口地址**:`/api/course/prerequisite`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "courseId": 3,
+  "prerequisiteId": 2
+}
+//上述新增依赖关系是让课程3依赖于课程2
+```
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型    | 是否必须 | 数据类型 | schema |
+| -------- | -------- | ----- | -------- | -------- | ------ |
+|coursePrerequisite|coursePrerequisite|body|true|CoursePrerequisite|CoursePrerequisite|
+|&emsp;&emsp;courseId|||false|integer(int64)||
+|&emsp;&emsp;prerequisiteId|||false|integer(int64)||
+
+
+**响应状态**:
+
+
+| 状态码 | 说明 | schema |
+| -------- | -------- | ----- | 
+|200|OK|Result|
+|201|Created||
+|401|Unauthorized||
+|403|Forbidden||
+|404|Not Found||
+
+
+**响应参数**:
+
+
+| 参数名称 | 参数说明 | 类型 | schema |
+| -------- | -------- | ----- |----- | 
+|code||integer(int32)|integer(int32)|
+|data||object||
+|msg||string||
+
+
+**响应示例**:
+```javascript
+{
+  "code": 1,
+  "msg": null,
+  "data": null
+}
+```
+
+
 
 ## 获取用户所有课程
 
