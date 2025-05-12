@@ -12,9 +12,6 @@ spring:
     url: jdbc:mysql://8.148.235.193:3306/learning_plan_tool?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true
     username: user1
     password: 18378059289Asd
-  session:
-    store-type: redis
-    timeout: 30m
 
 
 mybatis-plus:
