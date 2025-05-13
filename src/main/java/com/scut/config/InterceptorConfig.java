@@ -14,16 +14,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     
     @Autowired
     private JwtTokenUserInterceptor jwtTokenUserInterceptor;
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        log.info("跨域拦截器加载...");
-        registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:5173")
-                .allowedMethods("*")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
-    }
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
