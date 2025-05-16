@@ -1,6 +1,6 @@
 package com.scut.algorithm;
 
-import com.scut.algorithm.impl.PlanningAlgorithmImpl2;
+import com.scut.algorithm.impl.PlanningAlgorithmImpl;
 import com.scut.constant.CourseTypeConstant;
 import com.scut.entity.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,14 +11,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlanningAlgorithmImpl2Test {
+class PlanningAlgorithmImplTest {
     private PlanningAlgorithm planningAlgorithm;
     private List<Course> courses;
     private List<CoursePrerequisite> relations;
 
     @BeforeEach
     void setUp() {
-        planningAlgorithm = new PlanningAlgorithmImpl2();
+        planningAlgorithm = new PlanningAlgorithmImpl();
         courses = new ArrayList<>();
         relations = new ArrayList<>();
 

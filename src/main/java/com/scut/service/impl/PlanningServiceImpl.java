@@ -1,7 +1,7 @@
 package com.scut.service.impl;
 
 import com.scut.algorithm.CycleJudge;
-import com.scut.algorithm.impl.PlanningAlgorithmImpl2;
+import com.scut.algorithm.impl.PlanningAlgorithmImpl;
 import com.scut.constant.MessageConstant;
 import com.scut.context.BaseContext;
 import com.scut.dto.PlanQueryDTO;
@@ -28,7 +28,7 @@ public class PlanningServiceImpl implements PlanningService {
     @Autowired
     private CycleJudge cycleJudge;
 
-    private final PlanningAlgorithmImpl2 planningAlgorithm2 = new PlanningAlgorithmImpl2();
+    private final PlanningAlgorithmImpl planningAlgorithm2 = new PlanningAlgorithmImpl();
 
     /**
      * 返回培养计划编制
