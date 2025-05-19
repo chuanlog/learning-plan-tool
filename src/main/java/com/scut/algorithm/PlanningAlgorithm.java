@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * 培养计划编制的相关算法
  */
-//TODO 实现此接口
 public interface PlanningAlgorithm {
     /**
      * 获取培养计划
