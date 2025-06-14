@@ -1,4 +1,4 @@
-DROP DATABASE learning_plan_tool;
+DROP DATABASE IF EXISTS learning_plan_tool;
 CREATE DATABASE IF NOT EXISTS `learning_plan_tool`;
 USE learning_plan_tool;
 -- 建立课程表

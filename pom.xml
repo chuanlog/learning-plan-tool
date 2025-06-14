@@ -55,7 +55,7 @@
             <artifactId>hutool-all</artifactId>
             <version>5.8.26</version>
         </dependency>
-        <!-- 接口文档：https://doc.xiaominfo.com/docs/quick-start#spring-boot-2-->
+        <!-- 接口文档knife4j依赖-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
